@@ -12,6 +12,7 @@ interface DialogProps {
     children: ReactElement
 }
 
+// Why dialog styles are inline while the rest is in CSS? keep it consistent. 
 const OVERLAY_STYLES = {
   position: 'absolute',
   top:0,
@@ -21,6 +22,8 @@ const OVERLAY_STYLES = {
   backgroundColor: 'rgba(0, 0, 0, .7)',
 }
 
+// In terms of API - handle is usually used to "handle" and event, while events exposed to consumers should start with on - so I would change
+// to onClose
 export default function Dialog({ children, isOpen, handleClose, container }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -28,6 +31,7 @@ export default function Dialog({ children, isOpen, handleClose, container }: Dia
     if (event.key === 'Escape') {
         handleClose(event)
     }
+// Something is off with indents, making it less readable
 };
 
 const handleClickOutside = (event: Event) => {
@@ -43,13 +47,16 @@ const handleClickOutside = (event: Event) => {
             document.removeEventListener('keydown', handleClickEsc, true);
             document.removeEventListener('click', handleClickOutside, true);
         };
-    
   }, [handleClose])
 
   const overlayRef = useAriaHidden()
 
   if (!isOpen) return null;
-
+    
+  // From here on - isOpen is always true (since if it's not, you already returned)
+  // So the rest of the code should just have - 
+  // e.g <FocusTrap active>
+  // e.g  <dialog className="dialog" ref={dialogRef} open>
   return (
     <ReactPortal container={container}>
       <FocusTrap active={isOpen}>
